@@ -29,23 +29,19 @@ namespace CSharpGame
                     {
                         break; //if yes, loop stop
                     }
-                    if (CheckTie(bBoard)) //Check if it's a tie
-                    {
-                        Console.WriteLine("It's a tie!");
-                        break; //if yes, loop stop
-                    }
                     CheckTie(bBoard);
 
-                } while(!CheckWinner(bBoard));
+                } while (true);
+            }
 
-                bBoard.ShowBoard(bBoard); //Shows one last time the board
+            bBoard.ShowBoard(bBoard); //Shows one last time the board
             }
 
             static void PlayerPlay(Board bBoard) //Player Plays
             {
-                while(true) //Create a loop that ask for an input, just stop when the input is valid
+                while (true) //Create a loop that ask for an input, just stop when the input is valid
                 {
-                    Console.Write("Make your move (1-9): "); 
+                    Console.Write("Make your move (1-9): ");
                     int Choice = Convert.ToInt32(Console.ReadLine());
                     if (bBoard.Space1[Choice - 1] == " ") //Check if the position mentioned by the player is empty
                     {
@@ -55,11 +51,11 @@ namespace CSharpGame
                 }
             }
 
+            static Random random = new Random();
             static void ComputerPlay(Board bBoard) //Computer plays
             {
                 while (true) //Create a loop that generate a random position and just stop when the computer is allowed to write that
                 {
-                    Random random = new Random();
                     int number = random.Next(0, 8);
                     if (bBoard.Space1[number] == " ") //Verify if the position is already ocuppied
                     {
@@ -68,57 +64,26 @@ namespace CSharpGame
                     }
                 }
             }
-            static bool CheckWinner(Board bBoard) //Check if the player or computer won
+            static bool CheckWinner(Board bBoard)
             {
-                if (bBoard.Space1[0] == bBoard.Space1[1] && bBoard.Space1[1] == bBoard.Space1[2] && bBoard.Space1[0] != " ") //All the possibilites of win
+                var winningConditions = new List<int[]>
                 {
-                    string result = bBoard.Space1[0] == "X" ? "Player wins!" : "Computer Wins!"; //Check who won
-                    Console.WriteLine(result);
-                    return true; //Return true to stop the loop in main method
-                }
-                else if (bBoard.Space1[3] == bBoard.Space1[4] && bBoard.Space1[4] == bBoard.Space1[5] && bBoard.Space1[3] != " ")
+                    new[] { 0, 1, 2 }, new[] { 3, 4, 5 }, new[] { 6, 7, 8 }, // Rows
+                    new[] { 0, 3, 6 }, new[] { 1, 4, 7 }, new[] { 2, 5, 8 }, // Columns
+                    new[] { 0, 4, 8 }, new[] { 2, 4, 6 } //Diagonal
+                };
+                foreach(var condition  in winningConditions)
                 {
-                    string result = bBoard.Space1[3] == "X" ? "Player wins!" : "Computer Wins!";
-                    Console.WriteLine(result);
-                    return true;
-                }
-                else if (bBoard.Space1[6] == bBoard.Space1[7] && bBoard.Space1[7] == bBoard.Space1[8] && bBoard.Space1[6] != " ")
+                    if (bBoard.Space1[condition[0]] == bBoard.Space1[condition[1]] &&
+                        bBoard.Space1[condition[1]] == bBoard.Space1[condition[2]] &&
+                        bBoard.Space1[condition[0]] != " ")
                 {
-                    string result = bBoard.Space1[6] == "X" ? "Player wins!" : "Computer Wins!";
+                    string result = bBoard.Space1[condition[0]] == "X" ? "Player wins!" : "Computer Wins!";
                     Console.WriteLine(result);
                     return true;
                 }
-                else if (bBoard.Space1[0] == bBoard.Space1[3] && bBoard.Space1[3] == bBoard.Space1[6] && bBoard.Space1[0] != " ")
-                {
-                    string result = bBoard.Space1[0] == "X" ? "Player wins!" : "Computer Wins!";
-                    Console.WriteLine(result);
-                    return true;
-                }
-                else if (bBoard.Space1[1] == bBoard.Space1[4] && bBoard.Space1[4] == bBoard.Space1[7] && bBoard.Space1[1] != " ")
-                {
-                    string result = bBoard.Space1[1] == "X" ? "Player wins!" : "Computer Wins!";
-                    Console.WriteLine(result);
-                    return true;
-                }
-                else if (bBoard.Space1[2] == bBoard.Space1[5] && bBoard.Space1[5] == bBoard.Space1[8] && bBoard.Space1[2] != " ")
-                {
-                    string result = bBoard.Space1[2] == "X" ? "Player wins!" : "Computer Wins!";
-                    Console.WriteLine(result);
-                    return true;
-                }
-                else if (bBoard.Space1[0] == bBoard.Space1[4] && bBoard.Space1[4] == bBoard.Space1[8] && bBoard.Space1[0] != " ")
-                {
-                    string result = bBoard.Space1[0] == "X" ? "Player wins!" : "Computer Wins!";
-                    Console.WriteLine(result);
-                    return true;
-                }
-                else if (bBoard.Space1[2] == bBoard.Space1[4] && bBoard.Space1[4] == bBoard.Space1[6] && bBoard.Space1[2] != " ")
-                {
-                    string result = bBoard.Space1[2] == "X" ? "Player wins!" : "Computer Wins!";
-                    Console.WriteLine(result);
-                    return true;
-                }
-                return false; //Return false for the loop continues in main method
+            }
+            return false;
             }
 
             static bool CheckTie(Board bBoard) //Check if it's a tie!
@@ -139,4 +104,3 @@ namespace CSharpGame
             }
         }
     }
-}
