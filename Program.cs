@@ -6,64 +6,79 @@ namespace CSharpGame
     {
         static void Main(string[] args)
         {
-            Board bBoard = new Board();//Create an object of the board, that is used to keep the positions and the board
+            Board bBoard = new Board();
             Console.WriteLine("Welcome to Tic Tac Toe Game!");
             {
-                do //Start the game
+                do
                 {
-                    bBoard.ShowBoard(bBoard); //Show board that it is on Board.cs
+                    bBoard.ShowBoard(bBoard);
 
-                    PlayerPlay(bBoard); //Player play
+                    PlayerPlay(bBoard);
 
-                    if (CheckWinner(bBoard)) //Check if the player won
+                    if (CheckWinner(bBoard)) 
                     {
-                        break; //if yes, loop stop
+                        break; 
                     }
-                    if (CheckTie(bBoard)) //Check if it's a tie
+                    if (CheckTie(bBoard)) 
                     {
                         Console.WriteLine("It's a tie!");
-                        break; //if yes, loop stop
+                        break; 
                     }
-                    ComputerPlay(bBoard); //Computer Play
-                    if (CheckWinner(bBoard)) //Check if the Computer won
+                    ComputerPlay(bBoard); 
+                    if (CheckWinner(bBoard)) 
                     {
-                        break; //if yes, loop stop
+                        break; 
                     }
                     CheckTie(bBoard);
 
                 } while (true);
             }
 
-            bBoard.ShowBoard(bBoard); //Shows one last time the board
+            bBoard.ShowBoard(bBoard);
             }
 
-            static void PlayerPlay(Board bBoard) //Player Plays
+            // Save player's input and check if space is already filled
+            static void PlayerPlay(Board bBoard)
             {
-                while (true) //Create a loop that ask for an input, just stop when the input is valid
+                while (true)
                 {
                     Console.Write("Make your move (1-9): ");
-                    int Choice = Convert.ToInt32(Console.ReadLine());
-                    if (bBoard.Space1[Choice - 1] == " ") //Check if the position mentioned by the player is empty
+
+                    // Tries to capture exceptions before parsing 
+                    try
                     {
-                        bBoard.Space1[Choice - 1] = "X";
-                        break;
+                        int Choice = Convert.ToInt32(Console.ReadLine());
+                        if (bBoard.Space1[Choice - 1] == " ")
+                        {
+                            bBoard.Space1[Choice - 1] = "X";
+                            break;
+                        }  
+                    } 
+                    
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Please, enter only valid digits. Try again");
                     }
                 }
             }
 
             static Random random = new Random();
-            static void ComputerPlay(Board bBoard) //Computer plays
+
+            // Allows to fill a random space in the board
+            static void ComputerPlay(Board bBoard)
             {
-                while (true) //Create a loop that generate a random position and just stop when the computer is allowed to write that
+                while (true) 
                 {
                     int number = random.Next(0, 8);
-                    if (bBoard.Space1[number] == " ") //Verify if the position is already ocuppied
+                    if (bBoard.Space1[number] == " ")
                     {
                         bBoard.Space1[number] = "O";
                         break;
                     }
                 }
             }
+
+            // Checks who filled 3 spaces in a row first.
             static bool CheckWinner(Board bBoard)
             {
                 var winningConditions = new List<int[]>
@@ -86,21 +101,22 @@ namespace CSharpGame
             return false;
             }
 
-            static bool CheckTie(Board bBoard) //Check if it's a tie!
+            // Checks if all the spaces are filled, AKA tie.
+            static bool CheckTie(Board bBoard)
             {
-                int countingOccupiedSpaces = 0; //Count the number of occupied positions on the board
+                int countingOccupiedSpaces = 0;
                 for (int i = 0; i < bBoard.Space1.Length; i++)
                 {
                     if (bBoard.Space1[i] != " ")
                     {
                         countingOccupiedSpaces++;
                     }
-                    if (countingOccupiedSpaces == 9) //If the 9 positions are occupied, it's a tie! The winner check is made before the Tie Check
+                    if (countingOccupiedSpaces == 9)
                     {
-                        return true; //return true for the main method loop stop
+                        return true;
                     }
                 }
-                return false; //return false for the main method loop continues
+                return false;
             }
         }
     }

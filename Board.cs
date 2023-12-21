@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace __Game
+﻿namespace __Game
 {
     internal class Board
     {
         public string[] Space1 = {" ", " ", " ", " ", " ", " ", " ", " ", " " }; //Keep the positions
 
-        public void ShowBoard(Board bBoard) //The draw of the board in console
+        // The board draw on console.
+        public void ShowBoard(Board bBoard)
         {
             Console.WriteLine("     |     |     ");
             Console.WriteLine("  " + bBoard.Space1[0] + "  |  " + bBoard.Space1[1] + "  |  " + bBoard.Space1[2] + "  ");
